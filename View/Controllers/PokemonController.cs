@@ -49,5 +49,26 @@ namespace View.Controllers
             repository.Delete(id);
             return RedirectToAction("Index");
         }
+     
+        public ActionResult Editar(int id)
+        {
+            Pokemon pokemon = repository.ObterPeloId(id);
+            ViewBag.Pokemon = pokemon;
+
+            CategoriaRepository categoriaRepository = new CategoriaRepository();
+            List<Categoria> categorias = categoriaRepository.ObterTodos();
+            ViewBag.Categorias = categorias;
+            return View();
+        }
+
+        public ActionResult Update(int id, string nome, int idCategoria)
+        {
+            Pokemon pokemon = new Pokemon();
+            pokemon.Id = id;
+            pokemon.Nome = nome;
+            pokemon.IdCategoria = idCategoria;
+            repository.Update(pokemon);
+            return RedirectToAction("Index");
+        }
     }
 }

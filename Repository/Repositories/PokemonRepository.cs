@@ -36,7 +36,23 @@ namespace Repository.Interfaces
 
         public Pokemon ObterPeloId(int id)
         {
-            throw new NotImplementedException();
+            SqlCommand command = Connection.OpenConnection();
+            command.CommandText = "SELECT * FROM pokemons WHERE id = @ID";
+            command.Parameters.AddWithValue("@ID", id);
+            DataTable table = new DataTable();
+            table.Load(command.ExecuteReader());
+            command.Connection.Close();
+            if (table.Rows.Count == 0)
+            {
+                return null;
+            }
+
+            DataRow row = table.Rows[0];
+            Pokemon pokemon = new Pokemon();
+            pokemon.Id = Convert.ToInt32(row["id"]);
+            pokemon.IdCategoria = Convert.ToInt32(row["id_categoria"]);
+            pokemon.Nome = row["nome"].ToString();
+            return pokemon;
         }
 
         public List<Pokemon> ObterTodos(string pesquisa)
@@ -65,7 +81,14 @@ namespace Repository.Interfaces
 
         public bool Update(Pokemon pokemon)
         {
-            throw new NotImplementedException();
+            SqlCommand command = Connection.OpenConnection();
+            command.CommandText = @"UPDATE pokemons SET nome = @NOME, id_categoria = @ID_CATEGORIA WHERE id = @ID";
+            command.Parameters.AddWithValue("@ID", pokemon.Id);
+            command.Parameters.AddWithValue("@NOME", pokemon.Nome);
+            command.Parameters.AddWithValue("@ID_CATEGORIA", pokemon.IdCategoria);
+            int quantideAfetada = command.ExecuteNonQuery();
+            command.Connection.Close();
+            return quantideAfetada == 1;
         }
     }
 }
