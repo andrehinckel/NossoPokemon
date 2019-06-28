@@ -21,6 +21,8 @@ namespace View.Controllers
         // GET: Pokemon
         public ActionResult Index()
         {
+            List<Pokemon> pokemons = repository.ObterTodos("");
+            ViewBag.Pokemons = pokemons;
             return View();
         }
 
@@ -42,5 +44,10 @@ namespace View.Controllers
             return RedirectToAction("Index");
         }
        
+        public ActionResult Delete(int id)
+        {
+            repository.Delete(id);
+            return RedirectToAction("Index");
+        }
     }
 }

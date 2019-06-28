@@ -15,7 +15,12 @@ namespace Repository.Interfaces
     {
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            SqlCommand command = Connection.OpenConnection();
+            command.CommandText = "DELETE FROM pokemons WHERE id = @ID";
+            command.Parameters.AddWithValue("@ID", id);
+            int quantidadeAfetada = command.ExecuteNonQuery();
+            command.Connection.Close();
+            return quantidadeAfetada == 1;
         }
 
         public int Inserir(Pokemon pokemon)
